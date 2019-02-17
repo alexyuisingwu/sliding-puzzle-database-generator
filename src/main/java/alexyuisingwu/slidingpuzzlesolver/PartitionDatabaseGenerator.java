@@ -49,7 +49,9 @@ public class PartitionDatabaseGenerator {
         this.db = new PatternDatabase(numRows, numCols, emptyInd, partition);
     }
 
-    public List<QueueState> getNeighbors(QueueState state, Move lastMove) {
+    // NOTE: not a function of QueueState, because
+    // QueueState doesn't track #rows or #cols to save space
+    private List<QueueState> getNeighbors(QueueState state, Move lastMove) {
         byte emptyInd = state.getEmptyInd();
 
         List<QueueState> neighbors = new ArrayList<>();
@@ -97,16 +99,12 @@ public class PartitionDatabaseGenerator {
 
         long maxMemoryUsed = 0;
 
-        int maxDist = 0;
-
         while (!q.isEmpty()) {
             QueueState curr = q.remove();
 
 //            curr.printState(numRows, numCols, this.partition);
 
-            if (this.db.update(curr.getTiles(), curr.getDistance())) {
-                maxDist = Math.max(curr.getDistance(), maxDist);
-            }
+            this.db.update(curr.getTiles(), curr.getDistance());
 
             for (QueueState neighbor : this.getNeighbors(curr, curr.getLastMove())) {
 
@@ -122,9 +120,7 @@ public class PartitionDatabaseGenerator {
                     Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
         }
 
-        System.out.println(visited.size());
-        System.out.println(String.format("Max memory used: %d B", maxMemoryUsed));
-        System.out.println("Max solution length: " + maxDist);
+//        System.out.println(String.format("Max memory used: %d B", maxMemoryUsed));
         return this.db;
     }
 
