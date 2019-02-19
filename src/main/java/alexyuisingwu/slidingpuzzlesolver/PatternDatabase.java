@@ -8,9 +8,11 @@ import java.nio.file.Files;
 
 public class PatternDatabase {
 
-    private byte emptyInd;
+    private final byte numRows;
+    private final byte numCols;
+    private final byte emptyInd;
 
-    private byte[] partition;
+    private final byte[] partition;
 
     private byte[] db;
     private NDArrayHelper dbHelper;
@@ -20,6 +22,8 @@ public class PatternDatabase {
     private int[] strides;
 
     public PatternDatabase(byte numRows, byte numCols, byte emptyInd, byte[] partition) {
+        this.numRows = numRows;
+        this.numCols = numCols;
 
         this.emptyInd = emptyInd;
 
@@ -57,7 +61,7 @@ public class PatternDatabase {
     }
 
     public void printToFile() {
-        this.printToFile("./src/main/resources/databases");
+        this.printToFile(String.format("./src/main/resources/databases/%d rows/%d columns/Empty %d", this.numRows, this.numCols, this.emptyInd));
     }
 
     public void printToFile(String filePath) {

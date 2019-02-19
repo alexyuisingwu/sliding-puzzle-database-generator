@@ -12,9 +12,7 @@ public class Driver {
                         (byte) emptyInd,
                         partition).generateDatabase().printToFile();
             }
-
         }
-
     }
 
     private static void timeDatabaseGeneration(PartitionDatabaseGenerator generator) {

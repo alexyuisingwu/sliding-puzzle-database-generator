@@ -25,6 +25,7 @@ public class VisitedSet{
         this.size = 0;
     }
 
+    // returns whether visited entry updated successfully (not already true)
     public boolean add(byte emptyInd, byte[] partition) {
         // NOTE: new byte[] not created for indexing because
         // allocating memory + copying over expensive (as add() called a lot)

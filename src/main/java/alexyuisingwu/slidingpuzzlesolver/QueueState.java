@@ -46,6 +46,8 @@ public class QueueState {
 
         this.emptyInd = movedInd;
 
+        this.distance = previous.getDistance();
+
         this.tiles = new byte[oldTiles.length];
         for (int i = 0; i < oldTiles.length; i++) {
             byte tile = oldTiles[i];
@@ -53,12 +55,16 @@ public class QueueState {
                 // if moved tile is in partition, swap with old empty tile
                 // because that's where it's moving
                 this.tiles[i] = oldEmpty;
+
+                // NOTE: distance only increases when empty tile swaps places with partition tile
+                // as otherwise, partition dbs wouldn't be disjoint
+                // (each heuristic value would account for moves of tiles outside of their partition)
+                this.distance++;
             } else {
                 this.tiles[i] = tile;
             }
         }
 
-        this.distance = (byte) (previous.getDistance() + 1);
 
         this.lastMove = move;
     }
