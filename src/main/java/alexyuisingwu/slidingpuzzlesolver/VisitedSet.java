@@ -2,6 +2,7 @@ package alexyuisingwu.slidingpuzzlesolver;
 
 import alexyuisingwu.util.ArrayUtils;
 
+import java.util.Arrays;
 import java.util.BitSet;
 
 public class VisitedSet{
@@ -17,11 +18,13 @@ public class VisitedSet{
     public VisitedSet(int numTiles, int partitionLength) {
 
         // # entries = numTiles ^ (partitionLength + 1)
-        this.visited = new BitSet((int) Math.pow(numTiles, partitionLength + 1));
+        int numEntries =  (int) Math.pow(numTiles, partitionLength + 1);
+
+        // indexed by tiles and emptyInd (in that order)
+        this.visited = new BitSet(numEntries);
 
         int[] shape = ArrayUtils.createIntArray(partitionLength + 1, numTiles);
-
-        this.visitedHelper = new NDArrayHelper(this.visited.length(), shape);
+        this.visitedHelper = new NDArrayHelper(numEntries, shape);
         this.size = 0;
     }
 

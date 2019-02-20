@@ -36,7 +36,7 @@ public class PartitionDatabaseGenerator {
     // NOTE: endianness doesn't matter currently as working with byte array
 
     // initializes pattern db
-    // - max distance < 255 per partition (see above notes)
+    // - max distance < 127 per partition (see above notes)
 
     public PartitionDatabaseGenerator(byte numRows, byte numCols,
                                       byte emptyInd, byte[] partition) {

@@ -29,10 +29,10 @@ public class PatternDatabase {
 
         // TODO: consider compressing
         // (each byte can pack 2 numbers in 16-tile puzzle, as indices go from 0 to 15)
+
+        // initializes db with entries set to distances of -1 (255 as unsigned byte)
         this.db = ArrayUtils.createByteArray((int) Math.pow(numTiles, partition.length), (byte) -1);
-
         int[] shape = ArrayUtils.createIntArray(partition.length, numTiles);
-
         this.dbHelper = new NDArrayHelper(this.db.length, shape);
     }
 
