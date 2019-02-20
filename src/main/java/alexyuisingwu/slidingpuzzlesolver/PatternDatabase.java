@@ -17,10 +17,6 @@ public class PatternDatabase {
     private byte[] db;
     private NDArrayHelper dbHelper;
 
-    // multiplier for each partition value for indexing into db (row-major)
-    // (simulating N-dimensional array with flattened array)
-    private int[] strides;
-
     public PatternDatabase(byte numRows, byte numCols, byte emptyInd, byte[] partition) {
         this.numRows = numRows;
         this.numCols = numCols;
@@ -50,7 +46,7 @@ public class PatternDatabase {
     public boolean update(byte[] tiles, byte heuristicValue) {
 
         int index = this.dbHelper.getIndex(tiles);
-        int currVal = this.db[index];
+        byte currVal = this.db[index];
 
         // NOTE: will be inaccurate if either value is > 127
         if (currVal == -1 || heuristicValue < currVal) {

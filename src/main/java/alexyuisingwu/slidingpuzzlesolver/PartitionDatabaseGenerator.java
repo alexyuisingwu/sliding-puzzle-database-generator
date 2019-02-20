@@ -83,12 +83,11 @@ public class PartitionDatabaseGenerator {
         return neighbors;
     }
 
+    // NOTE: make sure to tune memory limit for size of puzzle/partition (4x4-6-partition => ~2 GB)
     public PatternDatabase generateDatabase() {
 
         int numTiles = this.numRows * this.numCols;
 
-        // NOTE: can be slower when memory limit low
-        // (probably because garbage collector does more work in the beginning)
         VisitedSet visited = new VisitedSet(numTiles, this.partition.length);
 
         visited.add(this.emptyInd, this.partition);
@@ -97,7 +96,7 @@ public class PartitionDatabaseGenerator {
         Queue<QueueState> q = new ArrayDeque<>();
         q.add(new QueueState(this.emptyInd, this.partition, (byte) 0, null));
 
-        long maxMemoryUsed = 0;
+//        long maxMemoryUsed = 0;
 
         while (!q.isEmpty()) {
             QueueState curr = q.remove();
@@ -115,9 +114,9 @@ public class PartitionDatabaseGenerator {
 
                 }
             }
-            maxMemoryUsed = Math.max(
-                    maxMemoryUsed,
-                    Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
+//            maxMemoryUsed = Math.max(
+//                    maxMemoryUsed,
+//                    Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
         }
 
 //        System.out.println(String.format("Max memory used: %d B", maxMemoryUsed));
@@ -147,6 +146,7 @@ public class PartitionDatabaseGenerator {
         return generateDatabaseIDFS(24);
     }
 
+    // TODO: now that distance doesn't track # of moves (only increases for tiles in partition), update IDFS to track depth
     // generates Pattern Database using IDFS, stopping once depthLimit reached
     public PatternDatabase generateDatabaseIDFS(int depthLimit) {
 
