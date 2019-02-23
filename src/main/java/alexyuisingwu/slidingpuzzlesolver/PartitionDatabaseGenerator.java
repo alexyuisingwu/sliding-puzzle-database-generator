@@ -93,13 +93,13 @@ public class PartitionDatabaseGenerator {
         visited.add(this.emptyInd, this.partition);
 
         // TODO: consider serializing and compressing queue when inserting and decoding on pop
-        Queue<QueueState> q = new ArrayDeque<>();
+        Deque<QueueState> q = new ArrayDeque<>();
         q.add(new QueueState(this.emptyInd, this.partition, (byte) 0, null));
 
 //        long maxMemoryUsed = 0;
 
         while (!q.isEmpty()) {
-            QueueState curr = q.remove();
+            QueueState curr = q.removeFirst();
 
 //            curr.printState(numRows, numCols, this.partition);
 
@@ -109,8 +109,16 @@ public class PartitionDatabaseGenerator {
 
                 // if neighbor added to visited successfully (not already there), add neighbor to queue
                 if (visited.add(neighbor.getEmptyInd(), neighbor.getTiles())) {
-
-                    q.add(neighbor);
+                    // special case of BFS in binary-weight graph:
+                    // To ensure nodes expanded in non-decreasing order,
+                    // 0-weight edges are added to front of deque and 1-weight edges to the back.
+                    // This guarantees that every node popped from the queue stores the lowest
+                    // distance necessary to reach that node from the goal node (original node in queue).
+                    if (neighbor.getDistance() == curr.getDistance()) {
+                        q.addFirst(neighbor);
+                    } else {
+                        q.addLast(neighbor);
+                    }
 
                 }
             }
